@@ -9,7 +9,7 @@ class Page_hierach(MPTTModel):
     slug = models.CharField(max_length=50,null=True)
     url = models.CharField(max_length=255,null=True)
 
-    def save(self, *args, **kwargs)
+    def save(self, *args, **kwargs):
         if self.slug is None:
             # create a slug that's unique to siblings
             slug = slugify(self.name)
