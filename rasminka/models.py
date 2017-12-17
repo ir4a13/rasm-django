@@ -6,12 +6,15 @@ from django.template.defaultfilters import slugify
 
 class Node(MPTTModel):
     name = models.CharField(max_length=50)
-    slug = models.CharField(max_length=50, null=True)
-    url = models.CharField(max_length=255, null=True)
+    slug = models.SlugField()
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, on_delete=None)
 
     class MPTTMeta:
+        unique_together = ('slug', 'parent')
         order_insertion_by = ['name']
+        level_attr = 'mptt_level'
+        verbose_nema = 'Node'
+        verbose_name_plural = 'Nodes'
     # def save(self, *args, **kwargs):
     #     if self.slug is None:
     #         # create a slug that's unique to siblings
@@ -30,20 +33,25 @@ class Node(MPTTModel):
     #             self.url = self.slug
     #     super(Page_hierach, self).save(*args, **kwargs)
 
-class Page(models.Model):
+class Page(MPTTModel):
     name = models.CharField(max_length=64, blank=False, default="New Page")
     content = models.TextField(blank=True, default=None)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     modified = models.DateTimeField(auto_now_add=False, auto_now=True)
     published = models.BooleanField()
     publihed_on = models.DateTimeField(auto_now_add=False, auto_now=True)
+    slug = models.SlugField()
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, on_delete=None)
 
     def __str__(self):
         return "%s" % self.name
 
-    class Meta:
-        verbose_name = 'Postpage'
-        verbose_name_plural = 'Postpages'
+    class MPTTMeta:
+        order_insertion_by = ['name']
+        unique_together = ('slug', 'parent')
+        level_attr = 'mptt_level'
+        verbose_name = 'Page'
+        verbose_name_plural = 'Pages'
 
 class Project(models.Model):
     name = models.CharField(max_length=64, blank=False, default="New Page")
