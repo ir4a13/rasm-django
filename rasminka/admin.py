@@ -4,5 +4,6 @@ from .models import *
 
 # Register your models here.
 
-admin.site.register(Projects)
+admin.site.register(Project)
 admin.site.register(Node, MPTTModelAdmin)
+admin.site.register(Page)

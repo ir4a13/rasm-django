@@ -45,7 +45,7 @@ class Page(models.Model):
         verbose_name = 'Postpage'
         verbose_name_plural = 'Postpages'
 
-class Projects(models.Model):
+class Project(models.Model):
     name = models.CharField(max_length=64, blank=False, default="New Page")
     content = models.TextField(blank=True, default=None)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
