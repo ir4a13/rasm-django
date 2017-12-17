@@ -5,11 +5,11 @@ from .models import Page
 
 # Create your views here.
 def node(request):
-    return render(request, 'rasminka/page_content.html')
+    return render(request, 'base.html')
 
 
 def show_page(request, path=None):
-    path = get_object_or_404(Page, url=page_url)
-    return render(request, 'page_content.html')
+    page = get_object_or_404(Page, url=path)
+    return render(request, 'rasminka/page_content.html', {'page': page})
 
 

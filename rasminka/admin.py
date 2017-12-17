@@ -4,22 +4,6 @@ from .models import *
 
 # Register your models here.
 
-admin.site.register(Project)
-# admin.site.register(Node, MPTTModelAdmin)
-
-admin.site.register(
-    Node,
-    DraggableMPTTAdmin,
-    list_display=(
-        'tree_actions',
-        'indented_title',
-        # ...more fields if you feel like it...
-    ),
-    list_display_links=(
-        'indented_title',
-    ),
-)
-
 admin.site.register(
     Page,
     DraggableMPTTAdmin,
@@ -34,3 +18,19 @@ admin.site.register(
         'indented_title',
     ),
 )
+
+admin.site.register(
+    Project,
+    DraggableMPTTAdmin,
+    list_display=(
+        'tree_actions',
+        'indented_title',
+        'published',
+        'modified',
+        # ...more fields if you feel like it...
+    ),
+    list_display_links=(
+        'indented_title',
+    ),
+)
+
