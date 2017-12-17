@@ -47,6 +47,9 @@ class Page(MPTTModel):
         return "%s" % self.name
 
 
+    def get_absolute_url(self):
+        return reverse('gallery', kwargs={'path': self.get_path()})
+
     class MPTTMeta:
         order_insertion_by = ['name']
         level_attr = 'mptt_level'
