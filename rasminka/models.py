@@ -4,28 +4,31 @@ from django.template.defaultfilters import slugify
 
 # Create your models here.
 
-class Page_hierach(MPTTModel):
+class Node(MPTTModel):
     name = models.CharField(max_length=50)
-    slug = models.CharField(max_length=50,null=True)
-    url = models.CharField(max_length=255,null=True)
+    slug = models.CharField(max_length=50, null=True)
+    url = models.CharField(max_length=255, null=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, on_delete=None)
 
-    def save(self, *args, **kwargs):
-        if self.slug is None:
-            # create a slug that's unique to siblings
-            slug = slugify(self.name)
-            self.slug = slug
-            siblings = self.get_siblings()
-            i = 1
-            while siblings.filter(slug=self.slug).exists():
-                i += 1
-                self.slug = slug + '-%d' % i
-
-            # now create a URL based on parent's url + slug
-            if self.parent:
-                self.url = '%s/%s' % (self.parent.url, self.slug)
-            else:
-                self.url = self.slug
-        super(Page_hierach, self).save(*args, **kwargs)
+    class MPTTMeta:
+        order_insertion_by = ['name']
+    # def save(self, *args, **kwargs):
+    #     if self.slug is None:
+    #         # create a slug that's unique to siblings
+    #         slug = slugify(self.name)
+    #         self.slug = slug
+    #         siblings = self.get_siblings()
+    #         i = 1
+    #         while siblings.filter(slug=self.slug).exists():
+    #             i += 1
+    #             self.slug = slug + '-%d' % i
+    #
+    #         # now create a URL based on parent's url + slug
+    #         if self.parent:
+    #             self.url = '%s/%s' % (self.parent.url, self.slug)
+    #         else:
+    #             self.url = self.slug
+    #     super(Page_hierach, self).save(*args, **kwargs)
 
 class Page(models.Model):
     name = models.CharField(max_length=64, blank=False, default="New Page")
