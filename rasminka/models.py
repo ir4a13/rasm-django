@@ -1,6 +1,6 @@
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
-from django.template.defaultfilters import slugify
+from django.urls import reverse
 
 # Create your models here.
 
@@ -46,12 +46,16 @@ class Page(MPTTModel):
     def __str__(self):
         return "%s" % self.name
 
+
     class MPTTMeta:
         order_insertion_by = ['name']
-        unique_together = ('slug', 'parent')
         level_attr = 'mptt_level'
+
+    class Meta:
+        unique_together = (('slug', 'parent',))
         verbose_name = 'Page'
         verbose_name_plural = 'Pages'
+
 
 class Project(models.Model):
     name = models.CharField(max_length=64, blank=False, default="New Page")
