@@ -172,6 +172,7 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-# Custorm
+# Custom
 .idea/projectr.xml
 .idea/vcs.xml
+.idea/projectr.iml
