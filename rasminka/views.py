@@ -8,8 +8,8 @@ def node(request):
     return render(request, 'base.html')
 
 
-def show_page(request, path=None):
-    page = get_object_or_404(Page, url=path)
+def show_page(request, path_name):
+    page = get_object_or_404(Page, url=path_name)
     return render(request, 'rasminka/page_content.html', {'page': page})
 
 

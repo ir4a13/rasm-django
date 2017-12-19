@@ -17,6 +17,15 @@ class Page(MPTTModel):
     url = models.CharField(max_length=255, null=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, on_delete=None)
 
+    class MPTTMeta:
+        order_insertion_by = ['name']
+        level_attr = 'mptt_level'
+
+    class Meta:
+        unique_together = ('slug', 'parent')
+        verbose_name = 'Page'
+        verbose_name_plural = 'Pages'
+
     def __str__(self):
         return "%s" % self.name
 
@@ -28,14 +37,10 @@ class Page(MPTTModel):
             self.url = self.slug
         super(Page, self).save(*args, **kwargs)
 
-    class MPTTMeta:
-        order_insertion_by = ['name']
-        level_attr = 'mptt_level'
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('rasminka.views.show_page', args=[str(self.url)])
 
-    class Meta:
-        unique_together = ('slug', 'parent')
-        verbose_name = 'Page'
-        verbose_name_plural = 'Pages'
 
 
 class Project(models.Model):
@@ -44,7 +49,7 @@ class Project(models.Model):
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     modified = models.DateTimeField(auto_now_add=False, auto_now=True)
     published = models.BooleanField()
-    publihed_on = models.DateTimeField(auto_now_add=False, auto_now=True)
+    published_on = models.DateTimeField(auto_now_add=False, auto_now=True)
     slug = models.SlugField(unique=True)
     url = models.CharField(max_length=255, null=True)
 
